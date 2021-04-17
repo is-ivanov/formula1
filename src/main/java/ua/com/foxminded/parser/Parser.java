@@ -11,21 +11,23 @@ import java.util.stream.Stream;
 
 public class Parser implements Parserable {
 
+    private static final String MESSAGE_FILE_NOT_FOUND = "File not found";
+
     @Override
     public List<String> readFile(String filepath) {
         List<String> lines = new ArrayList<>();
 
-        try (Stream<String> stream = Files
-                .lines(Paths.get(this.getClass().getClassLoader().getResource(filepath).toURI()))) {
+        try (Stream<String> stream = Files.lines(Paths.get(this.getClass()
+                .getClassLoader().getResource(filepath).toURI()))) {
             lines = stream.collect(Collectors.toList());
         } catch (IOException | URISyntaxException e) {
-            System.out.println("exception");
+            System.err.println(MESSAGE_FILE_NOT_FOUND);
         }
         return lines;
     }
 
     @Override
-    public void parseLog() {
+    public void parseLogFile() {
 
     }
 }

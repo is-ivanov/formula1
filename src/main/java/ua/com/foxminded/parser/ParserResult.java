@@ -19,9 +19,10 @@ import ua.com.foxminded.racer.Racer;
 
 public class ParserResult implements Parserable {
 
-    private static final String PATTERN_FOR_DATE_TIME = "yyyy-MM-dd_HH:mm:ss.SSS";
-    private static final String PATTERN_REGEX_FOR_LOG = "([A-Z]{3})(.+)";
     private static final String MESSAGE_FILE_NOT_FOUND = "File not found!!";
+    private static final String PATTERN_REGEX_FOR_LOG = "([A-Z]{3})(.+)";
+    private static final String PATTERN_FOR_DATE_TIME = "yyyy-MM-dd_HH:mm:ss.SSS";
+    private static final DateTimeFormatter FORMATTER_DATE_TIME = DateTimeFormatter.ofPattern(PATTERN_FOR_DATE_TIME);    
 
     @Override
     public List<String> readFile(String filepath) {
@@ -69,9 +70,7 @@ public class ParserResult implements Parserable {
     }
 
     private LocalDateTime parseDateTime(String dateTimeString) {
-        DateTimeFormatter formatter = DateTimeFormatter
-                .ofPattern(PATTERN_FOR_DATE_TIME);
-        return LocalDateTime.parse(dateTimeString, formatter);
+        return LocalDateTime.parse(dateTimeString, FORMATTER_DATE_TIME);
     }
 
 }

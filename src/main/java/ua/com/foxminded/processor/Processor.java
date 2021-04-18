@@ -1,4 +1,4 @@
-package ua.com.foxminded.calculator;
+package ua.com.foxminded.processor;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 import ua.com.foxminded.racer.Racer;
 
-public class Calculator {
+public class Processor {
 
-    public List<Racer> calculateResult(List<Racer> racers,
+    public List<Racer> processResult(List<Racer> racers,
             Map<String, LocalDateTime> startTimes,
             Map<String, LocalDateTime> endTimes) {
 

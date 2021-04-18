@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 import ua.com.foxminded.racer.Racer;
 
-public class ParserResult implements Parserable {
+public class Parser implements Parserable {
 
     private static final String MESSAGE_FILE_NOT_FOUND = "File not found!!";
     private static final String PATTERN_REGEX_FOR_LOG = "([A-Z]{3})(.+)";

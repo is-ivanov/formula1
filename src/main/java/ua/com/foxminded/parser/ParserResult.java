@@ -37,11 +37,11 @@ public class ParserResult implements Parserable {
     }
 
     @Override
-    public Map<String, Racer> parseAbbreviationFile(List<String> fileContents) {
+    public List<Racer> parseAbbreviationFile(List<String> fileContents) {
 
-        return fileContents.stream().map((s) -> s.split("_"))
-                .map((a) -> new Racer(a[0], a[1], a[2]))
-                .collect(Collectors.toMap(Racer::getId, r -> r));
+        return fileContents.stream().map(s -> s.split("_"))
+                .map(a -> new Racer(a[0], a[1], a[2]))
+                .collect(Collectors.toList());
     }
 
     @Override

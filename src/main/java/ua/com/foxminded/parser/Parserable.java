@@ -7,10 +7,10 @@ import java.util.Map;
 import ua.com.foxminded.racer.Racer;
 
 public interface Parserable {
-    public List<String> readFile(String filepath);
+    List<String> readFile(String filepath);
 
-    public Map<String, Racer> parseAbbreviationFile(List<String> fileContents);
+    List<Racer> parseAbbreviationFile(List<String> fileContents);
 
-    public Map<String, LocalDateTime> parseLogFile(List<String> fileContents);
+    Map<String, LocalDateTime> parseLogFile(List<String> fileContents);
 
 }

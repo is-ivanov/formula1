@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,6 +19,8 @@ import ua.com.foxminded.racer.Racer;
 
 public class ParserResult implements Parserable {
 
+    private static final String PATTERN_FOR_DATE_TIME = "yyyy-MM-dd_HH:mm:ss.SSS";
+    private static final String PATTERN_REGEX_FOR_LOG = "([A-Z]{3})(.+)";
     private static final String MESSAGE_FILE_NOT_FOUND = "File not found!!";
 
     @Override
@@ -33,14 +40,38 @@ public class ParserResult implements Parserable {
     public Map<String, Racer> parseAbbreviationFile(List<String> fileContents) {
 
         return fileContents.stream().map((s) -> s.split("_"))
-                .map((s) -> new Racer(s[0], s[1], s[2]))
-                .collect(Collectors.toMap(Racer::getId, s -> s));
-
+                .map((a) -> new Racer(a[0], a[1], a[2]))
+                .collect(Collectors.toMap(Racer::getId, r -> r));
     }
 
     @Override
-    public void parseLogFile() {
+    public Map<String, LocalDateTime> parseLogFile(List<String> fileContents) {
+        Map<String, LocalDateTime> map = new HashMap<>();
 
+        for (String string : fileContents) {
+            String[] matches = getMatches(string);
+            map.put(matches[0], parseDateTime(matches[1]));
+        }
+        return map;
+
+    }
+
+    private String[] getMatches(String inputString) {
+        Pattern patternLogFile = Pattern.compile(PATTERN_REGEX_FOR_LOG);
+        Matcher matcher = patternLogFile.matcher(inputString);
+        String[] outputStrings = new String[2];
+        while (matcher.find()) {
+            for (int i = 0; i < 2; i++) {
+                outputStrings[i] = matcher.group(i + 1);
+            }
+        }
+        return outputStrings;
+    }
+
+    private LocalDateTime parseDateTime(String dateTimeString) {
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern(PATTERN_FOR_DATE_TIME);
+        return LocalDateTime.parse(dateTimeString, formatter);
     }
 
 }

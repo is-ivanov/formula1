@@ -1,5 +1,6 @@
 package ua.com.foxminded.parser;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,6 @@ public interface Parserable {
 
     public Map<String, Racer> parseAbbreviationFile(List<String> fileContents);
 
-    public void parseLogFile();
+    public Map<String, LocalDateTime> parseLogFile(List<String> fileContents);
 
 }

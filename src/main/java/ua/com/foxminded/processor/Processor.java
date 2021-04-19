@@ -10,27 +10,12 @@ import ua.com.foxminded.racer.Racer;
 
 public class Processor {
 
-    public List<Racer> processResult(List<Racer> racers,
-            Map<String, LocalDateTime> startTimes,
-            Map<String, LocalDateTime> endTimes) {
+    public List<Racer> calculateLapTime(List<Racer> racers) {
 
-        Map<String, Duration> lapTimes = calculateLapTime(startTimes, endTimes);
-
-        racers.stream().forEach(r -> {
-            r.setStartTime(startTimes.get(r.getId()));
-            r.setEndTime(endTimes.get(r.getId()));
-            r.setLapTime(lapTimes.get(r.getId()));
-        });
+        racers.stream().forEach(racer -> racer.setLapTime(
+                Duration.between(racer.getStartTime(), racer.getEndTime())));
 
         return racers;
-
     }
 
-    private Map<String, Duration> calculateLapTime(
-            Map<String, LocalDateTime> startTimes,
-            Map<String, LocalDateTime> endTimes) {
-        return startTimes.entrySet().stream().collect(Collectors.toMap(
-                Map.Entry::getKey,
-                x -> Duration.between(x.getValue(), endTimes.get(x.getKey()))));
-    }
 }

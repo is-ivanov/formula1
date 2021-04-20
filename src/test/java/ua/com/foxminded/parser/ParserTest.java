@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,17 @@ class ParserTest {
     private static final String FILENAME_MISSING_FILE = "missingFile";
     private static final String MESSAGE_FILENAME_IS_NULL = "Filename is null!!";
     private static final String MESSAGE_FILE_NOT_FOUND = "File \"missingFile\" not found!!";
+    private static final String PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss.SSS";
+    private static final String FIRST_RACER_ID = "DRR";
+    private static final String FIRST_RACER_NAME = "Daniel Ricciardo";
+    private static final String FIRST_RACER_TEAM = "RED BULL RACING TAG HEUER";
+    private static final String FIRST_RACER_START_TIME = "2018-05-24 12:14:12.054";
+    private static final String FIRST_RACER_END_TIME = "2018-05-24 12:15:24.067";
+    private static final String SECOND_RACER_ID = "SVF";
+    private static final String SECOND_RACER_NAME = "Sebastian Vettel";
+    private static final String SECOND_RACER_TEAM = "FERRARI";
+    private static final String SECOND_RACER_START_TIME = "2018-05-24 12:02:58.917";
+    private static final String SECOND_RACER_END_TIME = "2018-05-24 12:04:03.332";
 
     Parserable parser;
 
@@ -101,12 +113,19 @@ class ParserTest {
     @Test
     @DisplayName("test reading file with right data should return filled List of racers")
     void testReadingRightData() throws Exception {
-        Racer drr = new Racer("DRR", "Daniel Ricciardo", "RED BULL RACING TAG HEUER");
-        drr.setStartTime(LocalDateTime.of(2018, 5, 24, 12, 14, 12, 054000000));
-        Racer svf = new Racer("SVF", "Sebastian Vettel", "FERRARI");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PATTERN_DATE_TIME);
+        
+        Racer firstRacer = new Racer(FIRST_RACER_ID, FIRST_RACER_NAME, FIRST_RACER_TEAM);
+        firstRacer.setStartTime(LocalDateTime.parse(FIRST_RACER_START_TIME, formatter));
+        firstRacer.setEndTime(LocalDateTime.parse(FIRST_RACER_END_TIME, formatter));
+        
+        Racer secondRacer = new Racer(SECOND_RACER_ID, SECOND_RACER_NAME, SECOND_RACER_TEAM);
+        secondRacer.setStartTime(LocalDateTime.parse(SECOND_RACER_START_TIME, formatter));
+        secondRacer.setEndTime(LocalDateTime.parse(SECOND_RACER_END_TIME, formatter));
+        
         List<Racer> expectedRacers = new ArrayList<>();
-        expectedRacers.add(drr);
-        expectedRacers.add(svf);
+        expectedRacers.add(firstRacer);
+        expectedRacers.add(secondRacer);
         List<Racer> actualRacers = parser.parseDataFiles(FILENAME_ABBREVIATION_FILE,
                 FILENAME_START_LOG, FILENAME_END_LOG);
         assertEquals(expectedRacers, actualRacers);

@@ -1,5 +1,6 @@
 package ua.com.foxminded.formula1;
 
+import java.io.IOException;
 import java.util.List;
 import ua.com.foxminded.formatter.Formattable;
 import ua.com.foxminded.parser.Parserable;
@@ -22,7 +23,7 @@ public class Facade {
         this.formatter = formatter;
     }
 
-    public void processQualificationResult() {
+    public void processQualificationResult() throws IOException {
 
         List<Racer> racers = parser.parseDataFiles(FILENAME_ABBREVIATIONS,
                 FILENAME_START_LOG, FILENAME_END_LOG);

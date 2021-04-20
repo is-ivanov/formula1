@@ -23,12 +23,13 @@ public class Parser implements Parserable {
     private static final String DELIMITER = "_";
     private static final String PATTERN_REGEX_FOR_LOG = "([A-Z]{3})(.+)";
     private static final String PATTERN_FOR_DATE_TIME = "yyyy-MM-dd_HH:mm:ss.SSS";
-    private static final DateTimeFormatter FORMATTER_DATE_TIME = DateTimeFormatter.ofPattern(PATTERN_FOR_DATE_TIME);    
+    private static final DateTimeFormatter FORMATTER_DATE_TIME = DateTimeFormatter
+            .ofPattern(PATTERN_FOR_DATE_TIME);
 
     @Override
     public List<Racer> parseDataFiles(String abbreviationFilename,
-                                      String startLogFilename, 
-                                      String endLogFilename) {
+                                      String startLogFilename,
+                                      String endLogFilename) throws IOException {
         if (Objects.isNull(abbreviationFilename)
                 || Objects.isNull(startLogFilename)
                 || Objects.isNull(endLogFilename)) {
@@ -47,21 +48,26 @@ public class Parser implements Parserable {
         return racers;
     }
 
-    private List<String> readFile(String filepath) {
+    private List<String> readFile(String filepath) throws IOException {
         List<String> lines = new ArrayList<>();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filepath);
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
+        try (InputStream inputStream = getClass().getClassLoader()
+                .getResourceAsStream(filepath);
+                InputStreamReader inputStreamReader = new InputStreamReader(
+                        inputStream);
+                BufferedReader bufferedReader = new BufferedReader(
+                        inputStreamReader);) {
             lines = bufferedReader.lines().collect(Collectors.toList());
         } catch (IOException | NullPointerException e) {
-            System.err.println(MESSAGE_FILE + filepath + MESSAGE_NOT_FOUND);
+            throw new IOException(MESSAGE_FILE + filepath + MESSAGE_NOT_FOUND);
         }
         return lines;
     }
 
-    private List<Racer> parseAbbreviationFile(List<String> abbreviationFileContents) {
+    private List<Racer> parseAbbreviationFile(
+            List<String> abbreviationFileContents) {
 
-        return abbreviationFileContents.stream().map(s -> s.split(DELIMITER))
+        return abbreviationFileContents.stream()
+                .map(s -> s.split(DELIMITER))
                 .map(arr -> new Racer(arr[0], arr[1], arr[2]))
                 .collect(Collectors.toList());
     }

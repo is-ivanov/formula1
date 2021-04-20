@@ -1,6 +1,8 @@
 package ua.com.foxminded.formula1;
 
 
+import java.io.IOException;
+
 import ua.com.foxminded.formatter.Formattable;
 import ua.com.foxminded.formatter.Formatter;
 import ua.com.foxminded.parser.Parser;
@@ -15,6 +17,10 @@ public class Application {
         
         Facade facade = new Facade(parser, processor, formatter);
         
-        facade.processQualificationResult();
+        try {
+            facade.processQualificationResult();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

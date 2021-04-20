@@ -1,9 +1,9 @@
 package ua.com.foxminded.parser;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,8 +14,6 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import ua.com.foxminded.racer.Racer;
 
 public class Parser implements Parserable {
@@ -51,10 +49,11 @@ public class Parser implements Parserable {
 
     private List<String> readFile(String filepath) {
         List<String> lines = new ArrayList<>();
-        try (Stream<String> stream = Files.lines(Paths.get(this.getClass()
-                .getClassLoader().getResource(filepath).toURI()))) {
-            lines = stream.collect(Collectors.toList());
-        } catch (IOException | URISyntaxException e) {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filepath);
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);) {
+            lines = bufferedReader.lines().collect(Collectors.toList());
+        } catch (IOException | NullPointerException e) {
             System.err.println(MESSAGE_FILE + filepath + MESSAGE_NOT_FOUND);
         }
         return lines;

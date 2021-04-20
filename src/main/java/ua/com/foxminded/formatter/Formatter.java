@@ -11,8 +11,15 @@ import java.util.stream.Collectors;
 import ua.com.foxminded.racer.Racer;
 
 public class Formatter implements Formattable {
+    private static final int NUMBER_QUALIFIED_RACERS = 15;
+    private static final int NUMBER_AUXILIARY_CHARACTERS = 15;
     private static final String LF = System.lineSeparator();
+    private static final String SYMBOL_FOR_STRING_DELIMITER = "-";
+    private static final String DELIMITER_FOR_STRING_JOIN = "";
     private static final String PATTERN_DURATION = "mm:ss.SSS";
+    private static final String FIRST_PART_MASK = "%02d. %-";
+    private static final String SECOND_PART_MASK = "s | %-";
+    private static final String LAST_PART_MASK = "s | %s%s";
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(PATTERN_DURATION);
     
 
@@ -34,10 +41,14 @@ public class Formatter implements Formattable {
                                                racer.getTeam(),
                                                formatDuration(racer.getLapTime()),
                                                LF));
-            if(count == 15) {
-                int lenghtString = countMaxLenghtString(maxLenghtName, maxLenghtTeam);
-                
-                resultStrings.append(String.join("", Collections.nCopies(lenghtString, "-")) + LF);
+            if (count == NUMBER_QUALIFIED_RACERS) {
+                int lenghtString = countMaxLenghtString(maxLenghtName,
+                        maxLenghtTeam);
+
+                resultStrings.append(String
+                        .join(DELIMITER_FOR_STRING_JOIN, Collections.nCopies(
+                                lenghtString, SYMBOL_FOR_STRING_DELIMITER))
+                        + LF);
             }
             count++;
         }
@@ -46,12 +57,13 @@ public class Formatter implements Formattable {
     }
 
     private int countMaxLenghtString (int maxLenghtName, int maxLenghtTeam) {
-        return 4 + maxLenghtName + 3 + maxLenghtTeam + 12;
+        return NUMBER_AUXILIARY_CHARACTERS + maxLenghtName + maxLenghtTeam;
     }
     
     private String createMaskFormat(int maxLenghtName, int maxLenghtTeam) {
-        
-        return "%02d. %-" + maxLenghtName + "s | %-" + maxLenghtTeam + "s | %s%s";
+
+        return FIRST_PART_MASK + maxLenghtName + SECOND_PART_MASK
+                + maxLenghtTeam + LAST_PART_MASK;
     }
 
     private int countMaxLenghtName(List<Racer> resultCalculation) {

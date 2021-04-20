@@ -12,10 +12,10 @@ import ua.com.foxminded.racer.Racer;
 
 public class Formatter implements Formattable {
     private static final int NUMBER_QUALIFIED_RACERS = 15;
-    private static final int NUMBER_AUXILIARY_CHARACTERS = 15;
+    private static final int NUMBER_AUXILIARY_CHARACTERS = 19;
     private static final String LF = System.lineSeparator();
-    private static final String SYMBOL_FOR_STRING_DELIMITER = "-";
-    private static final String DELIMITER_FOR_STRING_JOIN = "";
+    private static final String SYMBOL_FOR_UNDERLINE = "-";
+    private static final String DELIMITER_FOR_SYMBOL_UNDERLINE = "";
     private static final String PATTERN_DURATION = "mm:ss.SSS";
     private static final String FIRST_PART_MASK = "%02d. %-";
     private static final String SECOND_PART_MASK = "s | %-";
@@ -46,8 +46,8 @@ public class Formatter implements Formattable {
                         maxLenghtTeam);
 
                 resultStrings.append(String
-                        .join(DELIMITER_FOR_STRING_JOIN, Collections.nCopies(
-                                lenghtString, SYMBOL_FOR_STRING_DELIMITER))
+                        .join(DELIMITER_FOR_SYMBOL_UNDERLINE, Collections.nCopies(
+                                lenghtString, SYMBOL_FOR_UNDERLINE))
                         + LF);
             }
             count++;

@@ -37,7 +37,7 @@ class ParserTest {
     private static final String SECOND_RACER_START_TIME = "2018-05-24 12:02:58.917";
     private static final String SECOND_RACER_END_TIME = "2018-05-24 12:04:03.332";
 
-    Parserable parser;
+    private Parserable parser;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -78,7 +78,7 @@ class ParserTest {
     }
 
     @Nested
-    @DisplayName("test input missimg file")
+    @DisplayName("test input missing file")
     class testMissingFile {
 
         @Test

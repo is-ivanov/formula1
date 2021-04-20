@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -18,7 +19,9 @@ import java.util.stream.Stream;
 import ua.com.foxminded.racer.Racer;
 
 public class Parser implements Parserable {
-    private static final String MESSAGE_FILE_NOT_FOUND = "File not found!!";
+    private static final String MESSAGE_FILENAME_IS_NULL = "Filename is null!!";
+    private static final String MESSAGE_FILE = "File \"";
+    private static final String MESSAGE_NOT_FOUND = "\" not found!!";
     private static final String DELIMITER = "_";
     private static final String PATTERN_REGEX_FOR_LOG = "([A-Z]{3})(.+)";
     private static final String PATTERN_FOR_DATE_TIME = "yyyy-MM-dd_HH:mm:ss.SSS";
@@ -28,7 +31,11 @@ public class Parser implements Parserable {
     public List<Racer> parseDataFiles(String abbreviationFilename,
                                       String startLogFilename, 
                                       String endLogFilename) {
-        
+        if (Objects.isNull(abbreviationFilename)
+                || Objects.isNull(startLogFilename)
+                || Objects.isNull(endLogFilename)) {
+            throw new IllegalArgumentException(MESSAGE_FILENAME_IS_NULL);
+        }
         List<String> fileContents = readFile(abbreviationFilename);
         List<Racer> racers = parseAbbreviationFile(fileContents);
         fileContents = readFile(startLogFilename);
@@ -48,15 +55,15 @@ public class Parser implements Parserable {
                 .getClassLoader().getResource(filepath).toURI()))) {
             lines = stream.collect(Collectors.toList());
         } catch (IOException | URISyntaxException e) {
-            System.err.println(MESSAGE_FILE_NOT_FOUND);
+            System.err.println(MESSAGE_FILE + filepath + MESSAGE_NOT_FOUND);
         }
         return lines;
     }
 
-    private List<Racer> parseAbbreviationFile(List<String> fileContents) {
+    private List<Racer> parseAbbreviationFile(List<String> abbreviationFileContents) {
 
-        return fileContents.stream().map(s -> s.split(DELIMITER))
-                .map(a -> new Racer(a[0], a[1], a[2]))
+        return abbreviationFileContents.stream().map(s -> s.split(DELIMITER))
+                .map(arr -> new Racer(arr[0], arr[1], arr[2]))
                 .collect(Collectors.toList());
     }
 

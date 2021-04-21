@@ -24,6 +24,15 @@ class FormatterTest {
     private static final String SECOND_RACER_NAME = "Sebastian Vettel";
     private static final String SECOND_RACER_TEAM = "FERRARI";
     private static final String SECOND_RACER_LAP_TIME = "PT01M04.415S";
+    private static final int NUMBER_QUALIFIED_RACERS = 15;
+    private static final int POSITION_FIRST_UNQUALIFIED_RACER = 16;
+    private static final String UNDERLINE = "---------------------------";
+    private static final String RACERS_ID = "id";
+    private static final String RACERS_NAME = "Name";
+    private static final String RACERS_TEAM = "Team";
+    private static final String RACERS_LAP_TIME = "00:00.001";
+    private static final String RACERS_LAP_TIME_DURATION = "PT00M00.001S";
+    private static final String FORMAT_MASK = "%02d. %-4s | %-4s | %s%s";
         
     
     private Formattable formatter;
@@ -58,16 +67,16 @@ class FormatterTest {
     @DisplayName("test drawing underline after 15 racers")
     void testDrawingUnderLineAfter15Racers() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 15; i++) {
-            stringBuilder.append(String.format("%02d. %-4s | %-4s | %s%s", i + 1, "Name", "Team", "00:00.001", LF));
+        for (int i = 0; i < NUMBER_QUALIFIED_RACERS; i++) {
+            stringBuilder.append(String.format(FORMAT_MASK, i + 1, RACERS_NAME, RACERS_TEAM, RACERS_LAP_TIME, LF));
         }
-        stringBuilder.append("---------------------------").append(LF)
-        .append(String.format("%02d. %-4s | %-4s | %s%s", 16, "Name", "Team", "00:00.001", LF));
+        stringBuilder.append(UNDERLINE).append(LF)
+        .append(String.format(FORMAT_MASK, POSITION_FIRST_UNQUALIFIED_RACER , RACERS_NAME, RACERS_TEAM, RACERS_LAP_TIME, LF));
         String expectedResult = stringBuilder.toString();
         
-        for (int i = 0; i < 16; i++) {
-            Racer racer = new Racer("df", "Name", "Team");
-            racer.setLapTime(Duration.parse("PT00M00.001S"));
+        for (int i = 0; i < POSITION_FIRST_UNQUALIFIED_RACER; i++) {
+            Racer racer = new Racer(RACERS_ID, RACERS_NAME, RACERS_TEAM);
+            racer.setLapTime(Duration.parse(RACERS_LAP_TIME_DURATION));
             racers.add(racer);
         }
         String actualResult = formatter.formatResult(racers);
